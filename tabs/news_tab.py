@@ -31,17 +31,17 @@ def render():
         )
         
         if uploaded_file:
-            file_content = uploaded_file.getvalue().decode('utf-8')
-            portfolio_df = portfolio_analyzer.parse_portfolio_csv(file_content)
+            portfolio_df = portfolio_analyzer.load_portfolio_from_csv(uploaded_file)
             
-            if not portfolio_df.empty:
+            if portfolio_df is not None and not portfolio_df.empty:
                 st.success(f"✅ Portfolio loaded! {len(portfolio_df)} stocks found.")
-                tickers = portfolio_df['Ticker'].tolist()
+                tickers = portfolio_df['Symbol'].tolist()
                 
                 # Display loaded portfolio
                 st.subheader("📈 Loaded Portfolio")
-                display_portfolio = portfolio_df[['Ticker', 'Quantity', 'InvestedValue']].copy()
-                display_portfolio['InvestedValue'] = display_portfolio['InvestedValue'].apply(lambda x: f"₹{x:,.0f}")
+                display_portfolio = portfolio_df[['Symbol', 'Quantity', 'Invested_Value']].copy()
+                display_portfolio['Invested_Value'] = display_portfolio['Invested_Value'].apply(lambda x: f"₹{x:,.0f}")
+                display_portfolio = display_portfolio.rename(columns={'Symbol': 'Ticker', 'Invested_Value': 'InvestedValue'})
                 st.dataframe(display_portfolio, use_container_width=True)
             else:
                 st.error("❌ Unable to parse the uploaded CSV. Please check the format.")
