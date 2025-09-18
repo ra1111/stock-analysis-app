@@ -119,10 +119,10 @@ class PortfolioAnalyzer:
         results = []
         
         for _, row in portfolio_df.iterrows():
-            ticker = row['Ticker']
+            ticker = row['Symbol']
             quantity = row['Quantity']
-            avg_price = row['AvgPrice']
-            invested_value = row['InvestedValue']
+            avg_price = row['Avg_Price']
+            invested_value = row['Invested_Value']
             
             # Get current price
             current_price = self.data_fetcher.get_current_price(ticker)
