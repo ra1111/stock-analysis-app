@@ -32,12 +32,11 @@ def render():
         )
         
         if uploaded_file:
-            file_content = uploaded_file.getvalue().decode('utf-8')
-            current_portfolio = analyzer.parse_portfolio_csv(file_content)
+            current_portfolio = analyzer.load_portfolio_from_csv(uploaded_file)
             
-            if not current_portfolio.empty:
+            if current_portfolio is not None and not current_portfolio.empty:
                 st.success(f"✅ Portfolio loaded! {len(current_portfolio)} stocks found.")
-                tickers = current_portfolio['Ticker'].tolist()
+                tickers = current_portfolio['Symbol'].tolist()
                 
                 # Analyze current portfolio for optimization
                 analyzed_portfolio = analyzer.analyze_portfolio(current_portfolio)
